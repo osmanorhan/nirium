@@ -1,0 +1,12 @@
+// ── Startup Daemons ───────────────────────────────────────────────────────────
+// All background processes launched by Niri on session start.
+
+spawn-at-startup "waybar"
+spawn-at-startup "swaync"
+spawn-at-startup "swaybg" "-i" "~/.config/niri/bg/bg-1.jpg" "-m" "fill"
+spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
+spawn-at-startup "bash" "-c" "wl-paste --watch cliphist store"
+spawn-at-startup "bash" "-c" "~/.config/niri/first-boot.sh"
+
+// ── Idle / Lock Policy ────────────────────────────────────────────────────────
+spawn-at-startup "hypridle"

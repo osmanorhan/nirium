@@ -1,0 +1,72 @@
+# Core system
+base
+linux
+linux-firmware
+btrfs-progs
+snapper
+
+# Bootloader
+limine
+efibootmgr
+
+# Networking and security
+networkmanager
+wpa_supplicant
+iwd
+ufw
+
+# Shell and tooling
+sudo
+git
+curl
+wget
+unzip
+zsh
+zsh-completions
+zsh-autosuggestions
+zsh-syntax-highlighting
+starship
+neovim
+tmux
+base-devel
+pciutils
+usbutils
+
+# Wayland/niri stack
+niri
+xwayland-satellite
+xdg-desktop-portal-gtk
+
+# Desktop essentials
+kitty
+grim
+slurp
+wl-clipboard
+pipewire
+wireplumber
+sddm
+xorg-server
+xorg-xauth
+xorg-xhost
+xorg-xsetroot
+xorg-xrdb
+xorg-xrandr
+bluez
+bluez-utils
+power-profiles-daemon
+
+# Apps
+firefox
+mpv
+yazi
+imv
+cups-pk-helper
+
+# Fonts
+ttf-jetbrains-mono-nerd
+noto-fonts
+noto-fonts-emoji
+
+# Graphics base
+mesa
+vulkan-icd-loader

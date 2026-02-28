@@ -1,0 +1,196 @@
+/* ── Nirium Waybar Style — Floating Pill Monokai Aesthetics ───────────────── */
+
+@define-color base rgba(39, 40, 34, 0.85);
+/* Transparent Monokai Base */
+@define-color mantle #1e1e1e;
+@define-color surface0 rgba(62, 61, 50, 0.9);
+@define-color surface1 #49483e;
+@define-color overlay #75715e;
+@define-color text #f8f8f2;
+@define-color subtext #cfcfc2;
+@define-color yellow #e6db74;
+@define-color orange #fd971f;
+@define-color red #f92672;
+@define-color purple #ae81ff;
+@define-color cyan #66d9ef;
+@define-color green #a6e22e;
+@define-color blue #66d9ef;
+
+* {
+  font-family: "JetBrainsMono Nerd Font", "Noto Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 0;
+  min-height: 0;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+window#waybar {
+  background-color: transparent;
+  /* Makes the main bar completely see-through */
+  color: @text;
+}
+
+/* Base pill shape for all modules */
+#custom-power,
+#workspaces,
+#window,
+#clock,
+#cpu,
+#memory,
+#pulseaudio,
+#network,
+#bluetooth,
+#battery,
+#tray,
+#custom-swaync {
+  background-color: @base;
+  color: @text;
+  border-radius: 12px;
+  margin: 0px 4px;
+  padding: 0px 14px;
+  border: 1px solid @surface1;
+  transition: all 0.2s ease-in-out;
+}
+
+/* ── Left Modules ────────────────────────────────────────── */
+
+#custom-power {
+  color: @red;
+  font-size: 16px;
+  margin-left: 0px;
+  padding-right: 16px;
+  padding-left: 16px;
+}
+
+#custom-power:hover {
+  background-color: @red;
+  color: @base;
+}
+
+#workspaces {
+  padding: 0px 4px;
+}
+
+#workspaces button {
+  padding: 2px 8px;
+  margin: 4px;
+  color: @subtext;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+#workspaces button.active {
+  background-color: @cyan;
+  color: @mantle;
+  font-weight: bold;
+}
+
+#workspaces button:hover {
+  background-color: @surface1;
+  color: @text;
+}
+
+#window {
+  color: @purple;
+  /* Optional: hide window title background if you want it minimalist
+    background-color: transparent;
+    border: none;
+    */
+}
+
+/* ── Center Module ───────────────────────────────────────── */
+
+#clock {
+  color: @yellow;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 0px 20px;
+}
+
+/* ── Right Modules ───────────────────────────────────────── */
+
+#cpu {
+  color: @orange;
+}
+
+#memory {
+  color: @green;
+}
+
+#pulseaudio {
+  color: @cyan;
+}
+
+#pulseaudio.muted {
+  color: @overlay;
+}
+
+#network {
+  color: @purple;
+}
+
+#network.disconnected {
+  color: @red;
+}
+
+#bluetooth {
+  color: @blue;
+}
+
+#battery.charging {
+  color: @green;
+}
+
+#battery.warning {
+  color: @orange;
+}
+
+#battery.critical {
+  color: @red;
+  animation: blink 2s linear infinite;
+}
+
+#custom-swaync {
+  margin-right: 0px;
+}
+
+#custom-swaync.notification {
+  color: @cyan;
+}
+
+#custom-swaync.dnd {
+  color: @overlay;
+}
+
+#tray {
+  padding: 0px 10px;
+}
+
+/* Tooltips */
+tooltip {
+  background: @surface0;
+  color: @text;
+  border: 1px solid @cyan;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+@keyframes blink {
+  0% {
+    background-color: @base;
+    color: @red;
+  }
+
+  50% {
+    background-color: @red;
+    color: @text;
+  }
+
+  100% {
+    background-color: @base;
+    color: @red;
+  }
+}

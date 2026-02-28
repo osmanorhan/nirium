@@ -1,0 +1,100 @@
+/* ── Nirium SwayNC Style — Monokai ──────────────────────────────────────── */
+
+@define-color base #272822;
+@define-color surface0 #3e3d32;
+@define-color surface1 #49483e;
+@define-color overlay #75715e;
+@define-color text #f8f8f2;
+@define-color subtext #cfcfc2;
+@define-color yellow #e6db74;
+@define-color orange #fd971f;
+@define-color red #f92672;
+@define-color purple #ae81ff;
+@define-color cyan #66d9ef;
+@define-color green #a6e22e;
+
+* {
+    font-family: "JetBrainsMono Nerd Font", "Noto Sans", sans-serif;
+}
+
+.control-center {
+    background: @base;
+    border: 1px solid @surface1;
+    border-radius: 10px;
+    padding: 8px;
+    color: @text;
+}
+
+.notification-row .notification {
+    background: @surface0;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 4px 0;
+    border-left: 3px solid @cyan;
+}
+
+.notification-row .critical .notification {
+    border-left-color: @red;
+}
+
+.notification-row .low .notification {
+    border-left-color: @overlay;
+}
+
+.notification .summary {
+    font-weight: 600;
+    color: @text;
+}
+
+.notification .body {
+    color: @subtext;
+    font-size: 12px;
+}
+
+.notification .time {
+    color: @overlay;
+    font-size: 11px;
+}
+
+.notification .close-button {
+    background: @surface1;
+    border-radius: 50%;
+    color: @subtext;
+    border: none;
+    min-width: 20px;
+    min-height: 20px;
+    transition: background 0.1s;
+}
+
+.notification .close-button:hover {
+    background: @red;
+    color: @base;
+}
+
+/* Title bar */
+.widget-title label {
+    font-weight: 700;
+    color: @text;
+    font-size: 14px;
+}
+
+.widget-title button {
+    color: @subtext;
+    background: @surface0;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 8px;
+}
+
+.widget-title button:hover {
+    background: @surface1;
+}
+
+/* DND toggle */
+.widget-dnd {
+    color: @text;
+}
+
+.widget-dnd switch:checked {
+    background: @cyan;
+}

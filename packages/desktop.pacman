@@ -1,0 +1,20 @@
+# Small polish extras, still lightweight
+btop
+fastfetch
+xdg-utils
+xdg-user-dirs
+libnotify
+bluetui
+impala
+# ── Modular Wayland shell stack ───────────────────────────────────────────────
+waybar
+fuzzel
+swaync
+swaybg
+hyprlock
+polkit-gnome
+pamixer
+matugen
+cliphist
+hypridle
+wlogout

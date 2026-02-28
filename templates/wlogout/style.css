@@ -1,0 +1,33 @@
+* {
+    font-family: "FiraCode Nerd Font", "sans-serif";
+    background-image: none;
+    transition: box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+window {
+    background-color: rgba(30, 30, 46, 0.85);
+    /* Dark slightly transparent */
+}
+
+button {
+    color: #cdd6f4;
+    background-color: #313244;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #45475a;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 25%;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    margin: 10px;
+}
+
+button:focus,
+button:active,
+button:hover {
+    background-color: #f38ba8;
+    color: #1e1e2e;
+    border-color: #f38ba8;
+    outline-style: none;
+}

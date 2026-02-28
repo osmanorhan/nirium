@@ -1,0 +1,128 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 38,
+    "margin-top": 8,
+    "margin-left": 12,
+    "margin-right": 12,
+    "margin-bottom": 0,
+    "spacing": 6,
+    "modules-left": [
+        "custom/power",
+        "niri/workspaces",
+        "niri/window"
+    ],
+    "modules-center": [
+        "clock"
+    ],
+    "modules-right": [
+        "tray",
+        "cpu",
+        "memory",
+        "pulseaudio",
+        "network",
+        "bluetooth",
+        "battery",
+        "custom/swaync"
+    ],
+    "custom/power": {
+        "format": "⏻",
+        "tooltip": false,
+        "on-click": "wlogout"
+    },
+    "niri/workspaces": {
+        "format": "{index}",
+        "on-click": "activate"
+    },
+    "niri/window": {
+        "max-length": 40,
+        "format": "{title}"
+    },
+    "clock": {
+        "format": "  {:%H:%M}",
+        "format-alt": "  {:%A, %B %d, %Y}",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode": "year",
+            "mode-mon-col": 3,
+            "format": {
+                "today": "<span color='#89b4fa'><b><u>{}</u></b></span>"
+            }
+        }
+    },
+    "cpu": {
+        "format": "  {usage}%",
+        "tooltip": false,
+        "on-click": "kitty -- btop"
+    },
+    "memory": {
+        "format": "  {}%",
+        "tooltip": "Memory Usage",
+        "on-click": "kitty -- btop"
+    },
+    "pulseaudio": {
+        "format": "{icon}  {volume}%",
+        "format-muted": "󰝟  muted",
+        "format-icons": {
+            "default": [
+                "󰕿",
+                "󰖀",
+                "󰕾"
+            ]
+        },
+        "on-click": "kitty -- pamixer",
+        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "scroll-step": 5
+    },
+    "network": {
+        "format-wifi": "󰤨  {essid}",
+        "format-ethernet": "󰈀  {ifname}",
+        "format-disconnected": "󰤭  offline",
+        "tooltip-format": "{ifname} via {gwaddr}",
+        "on-click": "kitty -- impala"
+    },
+    "bluetooth": {
+        "format": "󰂯",
+        "format-connected": "󰂱  {device_alias}",
+        "format-off": "󰂲",
+        "on-click": "kitty -- bluetui",
+        "tooltip-format": "{controller_alias}\n{num_connections} connected"
+    },
+    "battery": {
+        "states": {
+            "good": 80,
+            "warning": 25,
+            "critical": 10
+        },
+        "format": "{icon}  {capacity}%",
+        "format-charging": "󰂄  {capacity}%",
+        "format-plugged": "󰚥  {capacity}%",
+        "format-full": "󰁹  full",
+        "format-icons": [
+            "󰁺",
+            "󰁻",
+            "󰁼",
+            "󰁽",
+            "󰁾",
+            "󰁿",
+            "󰂀",
+            "󰂁",
+            "󰂂",
+            "󰁹"
+        ]
+    },
+    "tray": {
+        "icon-size": 18,
+        "spacing": 8
+    },
+    "custom/swaync": {
+        "tooltip": false,
+        "format": "󰂚 ",
+        "format-alt": "󰂚",
+        "exec": "swaync-client -swb",
+        "return-type": "json",
+        "on-click": "swaync-client -t -sw",
+        "on-click-right": "swaync-client -d -sw",
+        "escape": true
+    }
+}

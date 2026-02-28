@@ -1,0 +1,20 @@
+// ── Window Rules ──────────────────────────────────────────────────────────────
+// Applied globally by niri. Works alongside prefer-no-csd to eliminate
+// old-school title bars and keep windows clean and modern.
+
+// Global: round corners and clip any lingering CSD chrome
+window-rule {
+    geometry-corner-radius 8
+    clip-to-geometry true
+}
+
+// Float and center TUI tools (impala, bluetui, btop)
+// Niri centers floating windows by default — no position needed.
+window-rule {
+    match app-id="impala"
+    match app-id="bluetui"
+    match app-id="btop"
+    open-floating true
+    default-column-width { fixed 875; }
+    default-window-height { fixed 600; }
+}

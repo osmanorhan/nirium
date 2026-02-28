@@ -1,0 +1,21 @@
+// ── Input Configuration ───────────────────────────────────────────────────────
+
+input {
+    keyboard {
+        xkb {}
+        numlock
+    }
+    touchpad {
+        tap
+        natural-scroll
+        scroll-method "two-finger"
+        dwt                        // disable-while-typing
+    }
+    mouse {
+        accel-speed 0.0
+    }
+}
+
+cursor {
+    hide-when-typing
+}

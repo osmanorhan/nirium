@@ -1,0 +1,17 @@
+// ── Nirium — Niri Configuration Entry Point ───────────────────────────────────
+// This file only loads the modular sub-configs.
+// Edit the individual files to customise each area:
+//
+//   startup.kdl  — daemons, idle policy (swayidle/swaylock)
+//   input.kdl    — keyboard, touchpad, mouse, cursor
+//   binds.kdl    — all keybindings
+//
+// Niri reloads config live — no restart needed after edits (Mod+Shift+R).
+
+prefer-no-csd
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+include "startup.kdl"
+include "input.kdl"
+include "binds.kdl"
+include "window-rules.kdl"
