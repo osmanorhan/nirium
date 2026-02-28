@@ -143,6 +143,9 @@ main() {
   if [[ ! -f "/mnt${user_home}/.zshrc" ]]; then
     cp "$SCRIPT_DIR/../templates/zsh/.zshrc" "/mnt${user_home}/.zshrc"
   fi
+  if [[ ! -f "/mnt${user_home}/.config/starship.toml" ]]; then
+    cp "$SCRIPT_DIR/../templates/starship/starship.toml" "/mnt${user_home}/.config/starship.toml"
+  fi
 
   if [[ ! -f "/mnt${user_home}/.config/mimeapps.list" ]]; then
     cat > "/mnt${user_home}/.config/mimeapps.list" <<'MIMEAPPS'
