@@ -101,6 +101,11 @@ window#waybar {
     */
 }
 
+#window:empty {
+  background-color: transparent;
+  border: none;
+}
+
 /* ── Center Module ───────────────────────────────────────── */
 
 #clock {

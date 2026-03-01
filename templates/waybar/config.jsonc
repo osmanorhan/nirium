@@ -35,7 +35,11 @@
     },
     "niri/window": {
         "max-length": 40,
-        "format": "{title}"
+        "format": "{title}",
+        "separate-outputs": true,
+        "rewrite": {
+            "": ""
+        }
     },
     "clock": {
         "format": "  {:%H:%M}",
