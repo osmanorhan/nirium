@@ -1,12 +1,12 @@
 {
     "layer": "top",
     "position": "top",
-    "height": 38,
-    "margin-top": 8,
-    "margin-left": 12,
-    "margin-right": 12,
+    "height": 34,
+    "margin-top": 6,
+    "margin-left": 10,
+    "margin-right": 10,
     "margin-bottom": 0,
-    "spacing": 6,
+    "spacing": 4,
     "modules-left": [
         "niri/workspaces",
         "niri/window"
@@ -22,7 +22,6 @@
         "network",
         "bluetooth",
         "battery",
-        "custom/swaync",
         "custom/power"
     ],
     "custom/power": {
@@ -48,6 +47,13 @@
             "format": {
                 "today": "<span color='#89b4fa'><b><u>{}</u></b></span>"
             }
+        },
+        "actions": {
+            "on-click-right": "mode",
+            "on-click-forward": "tz_up",
+            "on-click-backward": "tz_down",
+            "on-scroll-up": "shift_up",
+            "on-scroll-down": "shift_down"
         }
     },
     "cpu": {
@@ -57,8 +63,7 @@
     },
     "memory": {
         "format": "  {}%",
-        "tooltip": "Memory Usage",
-        "on-click": "kitty -- btop"
+        "tooltip": "Memory Usage"
     },
     "pulseaudio": {
         "format": "{icon}  {volume}%",
@@ -70,7 +75,7 @@
                 "󰕾"
             ]
         },
-        "on-click": "kitty -- pamixer",
+        "on-click": "kitty --class pamixer sh -c 'pamixer; echo \"\"; echo \"Press Enter to exit.\"; read'",
         "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
         "scroll-step": 5
     },

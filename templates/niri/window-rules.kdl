@@ -14,6 +14,7 @@ window-rule {
     match app-id="impala"
     match app-id="bluetui"
     match app-id="btop"
+    match app-id="pamixer"
     open-floating true
     default-column-width { fixed 875; }
     default-window-height { fixed 600; }

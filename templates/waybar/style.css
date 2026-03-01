@@ -18,7 +18,7 @@
 
 * {
   font-family: "JetBrainsMono Nerd Font", "Noto Sans", sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   border: none;
   border-radius: 0;
@@ -44,13 +44,12 @@ window#waybar {
 #network,
 #bluetooth,
 #battery,
-#tray,
-#custom-swaync {
+#tray {
   background-color: @base;
   color: @text;
   border-radius: 12px;
-  margin: 0px 4px;
-  padding: 0px 14px;
+  margin: 0px 2px;
+  padding: 0px 10px;
   border: 1px solid @surface1;
   transition: all 0.2s ease-in-out;
 }
@@ -91,6 +90,7 @@ window#waybar {
 #workspaces button:hover {
   background-color: @surface1;
   color: @text;
+  text-shadow: 0 0 2px rgba(39, 40, 34, 0.85);
 }
 
 #window {
@@ -105,9 +105,9 @@ window#waybar {
 
 #clock {
   color: @yellow;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: bold;
-  padding: 0px 20px;
+  padding: 0px 14px;
 }
 
 /* ── Right Modules ───────────────────────────────────────── */
@@ -151,18 +151,6 @@ window#waybar {
 #battery.critical {
   color: @red;
   animation: blink 2s linear infinite;
-}
-
-#custom-swaync {
-  margin-right: 0px;
-}
-
-#custom-swaync.notification {
-  color: @cyan;
-}
-
-#custom-swaync.dnd {
-  color: @overlay;
 }
 
 #tray {
