@@ -63,7 +63,7 @@
     "cpu": {
         "format": "  {usage}%",
         "tooltip": false,
-        "on-click": "kitty -- btop"
+        "on-click": "bash -c 'pgrep -x btop >/dev/null && niri msg action focus-window --match app-id=btop || kitty --class btop -e btop'"
     },
     "memory": {
         "format": "  {}%",
@@ -88,13 +88,13 @@
         "format-ethernet": "󰈀  {ifname}",
         "format-disconnected": "󰤭  offline",
         "tooltip-format": "{ifname} via {gwaddr}",
-        "on-click": "kitty -- impala"
+        "on-click": "bash -c 'pgrep -x impala >/dev/null && niri msg action focus-window --match app-id=impala || kitty --class impala -e impala'"
     },
     "bluetooth": {
         "format": "󰂯",
         "format-connected": "󰂱  {device_alias}",
         "format-off": "󰂲",
-        "on-click": "kitty -- bluetui",
+        "on-click": "bash -c 'pgrep -x bluetui >/dev/null && niri msg action focus-window --match app-id=bluetui || kitty --class bluetui -e bluetui'",
         "tooltip-format": "{controller_alias}\n{num_connections} connected"
     },
     "battery": {
