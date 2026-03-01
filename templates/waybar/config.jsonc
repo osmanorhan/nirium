@@ -8,7 +8,6 @@
     "margin-bottom": 0,
     "spacing": 6,
     "modules-left": [
-        "custom/power",
         "niri/workspaces",
         "niri/window"
     ],
@@ -23,12 +22,13 @@
         "network",
         "bluetooth",
         "battery",
-        "custom/swaync"
+        "custom/swaync",
+        "custom/power"
     ],
     "custom/power": {
         "format": "⏻",
         "tooltip": false,
-        "on-click": "wlogout"
+        "on-click": "wlogout -b 2 -c 0 -r 0 -m 0 --protocol layer-shell"
     },
     "niri/workspaces": {
         "format": "{index}",

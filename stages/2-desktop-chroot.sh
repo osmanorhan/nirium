@@ -107,10 +107,10 @@ fi
 # waybar, swaync, fuzzel, swaybg, lxsession are installed via desktop.pacman.
 # They are started directly from ~/.config/niri/config.kdl via spawn-at-startup.
 
-# ── AUR GTK theme ─────────────────────────────────────────────────────────────
-# adw-gtk3 is AUR-only — install via yay (non-blocking).
-sudo -u "$USERNAME" bash -lc 'yay -S --noconfirm --needed adw-gtk3 papirus-icon-theme' || \
-  echo 'WARN: adw-gtk3 (AUR GTK theme) failed; GTK apps will use default theme' >&2
+# ── AUR Packages ──────────────────────────────────────────────────────────────
+# adw-gtk3, wlogout are AUR-only — install via yay (non-blocking).
+sudo -u "$USERNAME" bash -lc 'yay -S --noconfirm --needed adw-gtk3 papirus-icon-theme wlogout' || \
+  echo 'WARN: AUR packages installation failed; some features may be missing' >&2
 
 # ── First-run onboarding ──────────────────────────────────────────────────────
 cat > /usr/local/bin/nirium-first-run <<'FIRST_RUN'
