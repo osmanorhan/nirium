@@ -93,7 +93,7 @@ main() {
   max_swap_gib=$(( disk_gib - 1 - min_root_gib ))
 
   if (( max_swap_gib < 1 )); then
-    die "Disk ${disk} is too small (${disk_gib} GiB). Need at least 18 GiB for EFI + swap + root."
+    die "Disk ${disk} is too small (${disk_gib} GiB). Need at least 18 GiB for EFI and root (including swapfile)."
   fi
 
   if [[ -z $swap_gib ]]; then
@@ -115,7 +115,7 @@ main() {
 
   required_gib=$(( 1 + swap_gib + min_root_gib ))
   if (( disk_gib < required_gib )); then
-    die "Disk ${disk} is too small (${disk_gib} GiB). Need at least ${required_gib} GiB for 1 GiB EFI + ${swap_gib} GiB swap + ${min_root_gib} GiB root."
+    die "Disk ${disk} is too small (${disk_gib} GiB). Need at least ${required_gib} GiB for 1 GiB EFI + ${swap_gib} GiB swapfile + ${min_root_gib} GiB root."
   fi
 
   if (( assume_yes == 0 )); then
@@ -126,10 +126,8 @@ main() {
   fi
 
   local esp_part_num=1
-  local swap_part_num=2
-  local root_part_num=3
+  local root_part_num=2
   local esp_part=""
-  local swap_part=""
   local root_part=""
 
   log "Partitioning $disk"
@@ -137,24 +135,19 @@ main() {
   sgdisk --zap-all "$disk"
   sgdisk -o "$disk"
   sgdisk -n 1:0:+1G -t 1:ef00 -c 1:EFI-SYSTEM "$disk"
-  sgdisk -n 2:0:+"${swap_gib}"G -t 2:8200 -c 2:linux-swap "$disk"
-  sgdisk -n 3:0:0 -t 3:8304 -c 3:linux-root "$disk"
+  sgdisk -n 2:0:0 -t 2:8304 -c 2:linux-root "$disk"
   partprobe "$disk"
   udevadm settle
 
   esp_part="$(disk_part_path "$disk" "$esp_part_num")"
-  swap_part="$(disk_part_path "$disk" "$swap_part_num")"
   root_part="$(disk_part_path "$disk" "$root_part_num")"
 
   [[ -b $esp_part ]] || die "ESP partition not found: $esp_part"
-  [[ -b $swap_part ]] || die "Swap partition not found: $swap_part"
   [[ -b $root_part ]] || die "Root partition not found: $root_part"
 
   log "Formatting partitions"
   mkfs.fat -F 32 "$esp_part"
   mkfs.btrfs -f "$root_part"
-  mkswap "$swap_part"
-  swapon "$swap_part"
 
   log "Creating Btrfs subvolumes"
   mount "$root_part" /mnt
@@ -162,10 +155,15 @@ main() {
   btrfs subvolume create /mnt/@home
   btrfs subvolume create /mnt/@snapshots
   btrfs subvolume create /mnt/@var_log
+  btrfs subvolume create /mnt/@swap
   umount /mnt
 
   log "Mounting target filesystem"
   mount_target_layout "$root_part" "$esp_part"
+
+  log "Creating swapfile"
+  btrfs filesystem mkswapfile --size "${swap_gib}g" /mnt/swap/swapfile
+  swapon /mnt/swap/swapfile
 
   local packages_file="$SCRIPT_DIR/../packages/base.pacman"
   local PKG_LIST=()
@@ -179,7 +177,6 @@ main() {
 
   save_state_value TARGET_DISK "$disk"
   save_state_value ESP_PART_NUM "$esp_part_num"
-  save_state_value SWAP_PART "$swap_part"
   save_state_value ROOT_PART "$root_part"
 
   echo

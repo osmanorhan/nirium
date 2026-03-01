@@ -8,7 +8,6 @@ ROOT_PART=""
 TARGET_DISK=""
 ESP_PART=""
 ESP_PART_NUM=""
-SWAP_PART=""
 STAGE_NAME=""
 
 log() {
@@ -176,10 +175,11 @@ mount_target_layout() {
   local esp_part="$2"
 
   mount -o subvol=@,compress=zstd,noatime "$root_part" /mnt
-  mkdir -p /mnt/{boot,home,.snapshots,var/log}
+  mkdir -p /mnt/{boot,home,.snapshots,var/log,swap}
   mount -o subvol=@home,compress=zstd,noatime "$root_part" /mnt/home
   mount -o subvol=@snapshots,compress=zstd,noatime "$root_part" /mnt/.snapshots
   mount -o subvol=@var_log,compress=zstd,noatime "$root_part" /mnt/var/log
+  mount -o subvol=@swap,compress=zstd,noatime "$root_part" /mnt/swap
   mount "$esp_part" /mnt/boot
 }
 
@@ -189,7 +189,6 @@ ensure_target_mounted() {
   local root_candidates=()
   local root_count=0
   local guessed_esp=""
-  local guessed_swap=""
 
   if ! mountpoint -q /mnt; then
     mapfile -t root_candidates < <(lsblk -P -rno PATH,PARTLABEL | awk -F'"' 'tolower($4) ~ /linux[ -]?root|^root$/ {print $2}')
@@ -211,20 +210,20 @@ ensure_target_mounted() {
     [[ -b $TARGET_DISK ]] || die "Could not detect target disk from root partition: $root_part"
 
     guessed_esp="$(disk_part_path "$TARGET_DISK" 1)"
-    guessed_swap="$(disk_part_path "$TARGET_DISK" 2)"
 
     mount -o subvol=@,compress=zstd,noatime "$root_part" /mnt
-    mkdir -p /mnt/{boot,home,.snapshots,var/log}
+    mkdir -p /mnt/{boot,home,.snapshots,var/log,swap}
     mount -o subvol=@home,compress=zstd,noatime "$root_part" /mnt/home || true
     mount -o subvol=@snapshots,compress=zstd,noatime "$root_part" /mnt/.snapshots || true
     mount -o subvol=@var_log,compress=zstd,noatime "$root_part" /mnt/var/log || true
+    mount -o subvol=@swap,compress=zstd,noatime "$root_part" /mnt/swap || true
 
     if [[ -b $guessed_esp ]]; then
       mount "$guessed_esp" /mnt/boot || true
     fi
 
-    if [[ -b $guessed_swap ]] && ! swapon --noheadings --show=NAME | grep -qx "$guessed_swap"; then
-      swapon "$guessed_swap" || true
+    if [[ -f /mnt/swap/swapfile ]] && ! swapon --noheadings --show=NAME | grep -qx "/mnt/swap/swapfile"; then
+      swapon /mnt/swap/swapfile || true
     fi
   fi
 
@@ -238,7 +237,6 @@ ensure_target_mounted() {
 read_target_context() {
   local root_part_raw=""
   local esp_spec=""
-  local swap_spec=""
 
   root_part_raw="$(findmnt -no SOURCE /mnt || true)"
   [[ -n $root_part_raw ]] || die "Could not detect source for /mnt"
@@ -272,19 +270,8 @@ read_target_context() {
     mount "$ESP_PART" /mnt/boot
   fi
 
-  swap_spec="$(awk '$2=="none" && $3=="swap" {print $1; exit}' /mnt/etc/fstab)"
-  SWAP_PART=""
-  if [[ -n $swap_spec ]]; then
-    SWAP_PART="$(resolve_device_spec "$swap_spec")"
-  fi
-
-  if [[ -z $SWAP_PART || ! -b $SWAP_PART ]]; then
-    SWAP_PART="$(disk_part_path "$TARGET_DISK" 2)"
-  fi
-  [[ -b $SWAP_PART ]] || die "Could not resolve swap device"
-
-  if ! swapon --noheadings --show=NAME | grep -qx "$SWAP_PART"; then
-    swapon "$SWAP_PART" || true
+  if [[ -f /mnt/swap/swapfile ]] && ! swapon --noheadings --show=NAME | grep -qx "/mnt/swap/swapfile"; then
+    swapon /mnt/swap/swapfile || true
   fi
 
   ESP_PART_NUM="$(lsblk -no PARTN "$ESP_PART" | head -n1)"

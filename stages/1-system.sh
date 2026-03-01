@@ -119,7 +119,6 @@ main() {
   save_state_value USERNAME "$username"
   save_state_value EXTRA_KERNEL_CMDLINE "$extra_kernel_cmdline"
   save_state_value ROOT_PART "$ROOT_PART"
-  save_state_value SWAP_PART "$SWAP_PART"
   save_state_value TARGET_DISK "$TARGET_DISK"
   save_state_value ESP_PART_NUM "$ESP_PART_NUM"
 
@@ -138,7 +137,6 @@ main() {
     USER_PASSWORD="$user_password" \
     EXTRA_KERNEL_CMDLINE="$extra_kernel_cmdline" \
     ROOT_PART="$ROOT_PART" \
-    SWAP_PART="$SWAP_PART" \
     TARGET_DISK="$TARGET_DISK" \
     ESP_PART_NUM="$ESP_PART_NUM" \
     /bin/bash /root/nirium-1-system-chroot.sh

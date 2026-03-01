@@ -4,7 +4,7 @@
 # Variables are injected via the 'env' prefix in the arch-chroot call:
 #   KEYMAP TIMEZONE LOCALE HOSTNAME USERNAME USERNAME_SHELL
 #   ROOT_PASSWORD USER_PASSWORD EXTRA_KERNEL_CMDLINE
-#   ROOT_PART SWAP_PART TARGET_DISK ESP_PART_NUM
+#   ROOT_PART TARGET_DISK ESP_PART_NUM
 set -Eeuo pipefail
 trap 'echo "ERROR: chroot stage 1 failed at line $LINENO: $BASH_COMMAND" >&2' ERR
 
@@ -66,8 +66,12 @@ fi
 
 # ── Kernel cmdline ────────────────────────────────────────────────────────────
 ROOT_UUID="$(blkid -s UUID -o value "$ROOT_PART")"
-SWAP_UUID="$(blkid -s UUID -o value "$SWAP_PART")"
-CMDLINE="root=UUID=$ROOT_UUID rootflags=subvol=@ rw resume=UUID=$SWAP_UUID"
+if [[ -f /swap/swapfile ]]; then
+  RESUME_OFFSET="$(btrfs inspect-internal map-swapfile -r /swap/swapfile)"
+  CMDLINE="root=UUID=$ROOT_UUID rootflags=subvol=@ rw resume=UUID=$ROOT_UUID resume_offset=$RESUME_OFFSET"
+else
+  CMDLINE="root=UUID=$ROOT_UUID rootflags=subvol=@ rw"
+fi
 if [[ -n $EXTRA_KERNEL_CMDLINE ]]; then
   CMDLINE="$CMDLINE $EXTRA_KERNEL_CMDLINE"
 fi
