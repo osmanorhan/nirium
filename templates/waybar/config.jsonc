@@ -63,7 +63,7 @@
     "cpu": {
         "format": "  {usage}%",
         "tooltip": false,
-        "on-click": "bash -c 'pgrep -x btop >/dev/null && niri msg action focus-window --match app-id=btop || kitty --class btop -e btop'"
+        "on-click": "bash -c 'if pgrep -f \"kitty.*--class btop\" >/dev/null; then niri msg action focus-window --match app-id=btop; else kitty --class btop -e btop; fi'"
     },
     "memory": {
         "format": "  {}%",
@@ -79,7 +79,7 @@
                 "󰕾"
             ]
         },
-        "on-click": "kitty --class pamixer sh -c 'pamixer; echo \"\"; echo \"Press Enter to exit.\"; read'",
+        "on-click": "bash -c 'if pgrep -f \"kitty.*--class pamixer\" >/dev/null; then niri msg action focus-window --match app-id=pamixer; else kitty --class pamixer sh -c \"pamixer; echo \\\"\\\"; echo \\\"Press Enter to exit.\\\"; read\"; fi'",
         "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
         "scroll-step": 5
     },
@@ -88,13 +88,13 @@
         "format-ethernet": "󰈀  {ifname}",
         "format-disconnected": "󰤭  offline",
         "tooltip-format": "{ifname} via {gwaddr}",
-        "on-click": "bash -c 'pgrep -x impala >/dev/null && niri msg action focus-window --match app-id=impala || kitty --class impala -e impala'"
+        "on-click": "bash -c 'if pgrep -f \"kitty.*--class impala\" >/dev/null; then niri msg action focus-window --match app-id=impala; else kitty --class impala -e impala; fi'"
     },
     "bluetooth": {
         "format": "󰂯",
         "format-connected": "󰂱  {device_alias}",
         "format-off": "󰂲",
-        "on-click": "bash -c 'pgrep -x bluetui >/dev/null && niri msg action focus-window --match app-id=bluetui || kitty --class bluetui -e bluetui'",
+        "on-click": "bash -c 'if pgrep -f \"kitty.*--class bluetui\" >/dev/null; then niri msg action focus-window --match app-id=bluetui; else kitty --class bluetui -e bluetui; fi'",
         "tooltip-format": "{controller_alias}\n{num_connections} connected"
     },
     "battery": {

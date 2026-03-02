@@ -101,7 +101,7 @@ window#waybar {
     */
 }
 
-#window:empty {
+#window.empty {
   background-color: transparent;
   border: none;
 }

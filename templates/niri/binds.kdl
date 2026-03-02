@@ -8,7 +8,7 @@ binds {
     Mod+Return       hotkey-overlay-title="Terminal (kitty)"  { spawn "kitty"; }
     Mod+Shift+Return hotkey-overlay-title="File manager"      { spawn "kitty" "--" "yazi"; }
     Mod+B            hotkey-overlay-title="Browser"           { spawn "firefox"; }
-    Mod+V            hotkey-overlay-title="Clipboard history" { spawn-sh "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"; }
+    Mod+V            hotkey-overlay-title="Paste"             { spawn "wtype" "-M" "ctrl" "-k" "v" "-m" "ctrl"; }
 
     // ── Panels ────────────────────────────────────────────────────────────────
     Mod+N        hotkey-overlay-title="Notification center"   { spawn-sh "swaync-client -t -sw"; }
@@ -28,7 +28,8 @@ binds {
     Mod+Q        repeat=false hotkey-overlay-title="Close window"      { close-window; }
     Mod+F        hotkey-overlay-title="Fullscreen toggle"              { fullscreen-window; }
     Mod+Shift+F  hotkey-overlay-title="Toggle floating"                { toggle-window-floating; }
-    Mod+C        hotkey-overlay-title="Center floating window"         { center-window; }
+    Mod+C        hotkey-overlay-title="Copy"                           { spawn "wtype" "-M" "ctrl" "-k" "c" "-m" "ctrl"; }
+    Mod+Shift+C  hotkey-overlay-title="Center floating window"         { center-window; }
 
     // ── Focus (vim-style + arrows) ────────────────────────────────────────────
     Mod+H { focus-column-left; }

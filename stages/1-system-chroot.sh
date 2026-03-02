@@ -222,16 +222,6 @@ if command -v lspci > /dev/null 2>&1 && [[ -d /dev/dri/by-path ]]; then
   fi
 fi
 
-# Self-heal missing user config so first login is not blocked.
-if [[ -n ${HOME:-} ]]; then
-  cfg_root="${XDG_CONFIG_HOME:-$HOME/.config}"
-  if [[ ! -f "$cfg_root/niri/config.kdl" ]]; then
-    mkdir -p "$cfg_root/niri"
-    if [[ -f /etc/xdg/niri/config.kdl ]]; then
-      cp /etc/xdg/niri/config.kdl "$cfg_root/niri/config.kdl"
-    fi
-  fi
-fi
 
 # Fail fast with a visible journal entry if niri-session is missing.
 if ! command -v niri-session > /dev/null 2>&1; then

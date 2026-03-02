@@ -78,7 +78,6 @@ main() {
   arch-chroot /mnt env \
     USERNAME="$username" \
     ROOT_PART="$ROOT_PART" \
-    SWAP_PART="$SWAP_PART" \
     EXTRA_KERNEL_CMDLINE="$extra_kernel_cmdline" \
     /bin/bash /root/nirium-2-desktop-chroot.sh
 
@@ -96,55 +95,48 @@ main() {
   user_gid="$(arch-chroot /mnt id -g "$username")"
 
   log "Applying user configs for $username"
-  install -d "/mnt${user_home}/.config/kitty"    "/mnt${user_home}/.config/niri"
-  install -d "/mnt${user_home}/.config/waybar"   "/mnt${user_home}/.config/swaync"
-  install -d "/mnt${user_home}/.config/fuzzel"   "/mnt${user_home}/.config/hypr"
+  install -d "/mnt${user_home}/.config/niri"
   install -d "/mnt${user_home}/Pictures/Screenshots"
   install -d /mnt/usr/share/backgrounds
 
-  if [[ -d "$SCRIPT_DIR/../templates/theme" ]]; then
-    cp -r "$SCRIPT_DIR/../templates/theme" "/mnt${user_home}/.config/"
-  fi
-  if [[ -d "$SCRIPT_DIR/../templates/wlogout" ]]; then
-    cp -r "$SCRIPT_DIR/../templates/wlogout" "/mnt${user_home}/.config/"
-  fi
+  log "Applying Nirium declarative defaults"
+  
+  # Install nirium manager
+  install -m 755 "$SCRIPT_DIR/../nirium.sh" /mnt/usr/bin/nirium
 
-  if [[ ! -f "/mnt${user_home}/.config/kitty/current-theme.conf" ]]; then
-    cp "$SCRIPT_DIR/../templates/kitty/current-theme.conf" "/mnt${user_home}/.config/kitty/current-theme.conf"
-  fi
-  if [[ ! -f "/mnt${user_home}/.config/kitty/kitty.conf" ]]; then
-    cp "$SCRIPT_DIR/../templates/kitty/kitty.conf" "/mnt${user_home}/.config/kitty/kitty.conf"
-  fi
-  if [[ ! -f "/mnt${user_home}/.config/niri/config.kdl" ]]; then
-    cp "$SCRIPT_DIR/../templates/niri/config.kdl"        "/mnt${user_home}/.config/niri/config.kdl"
-    cp "$SCRIPT_DIR/../templates/niri/startup.kdl"       "/mnt${user_home}/.config/niri/startup.kdl"
-    cp "$SCRIPT_DIR/../templates/niri/input.kdl"         "/mnt${user_home}/.config/niri/input.kdl"
-    cp "$SCRIPT_DIR/../templates/niri/binds.kdl"         "/mnt${user_home}/.config/niri/binds.kdl"
-    cp "$SCRIPT_DIR/../templates/niri/window-rules.kdl"  "/mnt${user_home}/.config/niri/window-rules.kdl"
-  fi
+  # Create default configuration.toml
+  install -d /mnt/etc/nirium
+  cat > /mnt/etc/nirium/configuration.toml <<'EOF'
+[system]
+channel = "main"
+
+[components]
+niri = true
+waybar = true
+fuzzel = true
+swaync = true
+hyprlock = true
+hypridle = true
+kitty = true
+theme = true
+wlogout = true
+starship = true
+EOF
+
+  # Bootstrap declarative configurations to /etc/xdg
+  # Do NOT use /tmp — arch-chroot mounts a fresh tmpfs over it, wiping the payload.
+  mkdir -p /mnt/root/nirium-bootstrap
+  cp -a "$SCRIPT_DIR/.." /mnt/root/nirium-bootstrap/v2
+  chmod +x /mnt/usr/bin/nirium
+  arch-chroot /mnt bash -c "nirium bootstrap /root/nirium-bootstrap/v2"
+  rm -rf /mnt/root/nirium-bootstrap
+
+  # Install non-declarative home user files
   if [[ ! -f "/mnt${user_home}/.config/niri/first-boot.sh" ]]; then
     install -m 755 "$SCRIPT_DIR/../templates/niri/first-boot.sh" "/mnt${user_home}/.config/niri/first-boot.sh"
   fi
-  if [[ ! -f "/mnt${user_home}/.config/waybar/config.jsonc" ]]; then
-    cp "$SCRIPT_DIR/../templates/waybar/config.jsonc" "/mnt${user_home}/.config/waybar/config.jsonc"
-    cp "$SCRIPT_DIR/../templates/waybar/style.css"    "/mnt${user_home}/.config/waybar/style.css"
-  fi
-  if [[ ! -f "/mnt${user_home}/.config/swaync/config.json" ]]; then
-    cp "$SCRIPT_DIR/../templates/swaync/config.json" "/mnt${user_home}/.config/swaync/config.json"
-    cp "$SCRIPT_DIR/../templates/swaync/style.css"   "/mnt${user_home}/.config/swaync/style.css"
-  fi
-  if [[ ! -f "/mnt${user_home}/.config/fuzzel/fuzzel.ini" ]]; then
-    cp "$SCRIPT_DIR/../templates/fuzzel/fuzzel.ini" "/mnt${user_home}/.config/fuzzel/fuzzel.ini"
-  fi
-  if [[ ! -f "/mnt${user_home}/.config/hypr/hyprlock.conf" ]]; then
-    cp "$SCRIPT_DIR/../templates/hypr/hyprlock.conf" "/mnt${user_home}/.config/hypr/hyprlock.conf"
-    cp "$SCRIPT_DIR/../templates/hypr/hypridle.conf" "/mnt${user_home}/.config/hypr/hypridle.conf"
-  fi
   if [[ ! -f "/mnt${user_home}/.zshrc" ]]; then
     cp "$SCRIPT_DIR/../templates/zsh/.zshrc" "/mnt${user_home}/.zshrc"
-  fi
-  if [[ ! -f "/mnt${user_home}/.config/starship.toml" ]]; then
-    cp "$SCRIPT_DIR/../templates/starship/starship.toml" "/mnt${user_home}/.config/starship.toml"
   fi
 
   if [[ ! -f "/mnt${user_home}/.config/mimeapps.list" ]]; then
@@ -168,7 +160,7 @@ MIMEAPPS
   echo
   log "Stage 2 complete"
   echo "Target remains mounted at /mnt"
-  echo "Next: umount -R /mnt && reboot"
+  echo "Next: swapoff -a && umount -R /mnt && reboot"
   end_stage_logging "2-desktop"
 }
 

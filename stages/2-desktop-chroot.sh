@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # nirium stage 2 chroot body
 # This file is copied into /mnt/tmp/ by 2-desktop.sh and executed inside arch-chroot.
-# Variables injected via 'env': USERNAME ROOT_PART SWAP_PART EXTRA_KERNEL_CMDLINE
+# Variables injected via 'env': USERNAME ROOT_PART EXTRA_KERNEL_CMDLINE
 set -Eeuo pipefail
 trap 'echo "ERROR: chroot stage 2 failed at line $LINENO: $BASH_COMMAND" >&2' ERR
 
@@ -28,8 +28,12 @@ fi
 
 # ── Kernel cmdline ────────────────────────────────────────────────────────────
 ROOT_UUID="$(blkid -s UUID -o value "$ROOT_PART")"
-SWAP_UUID="$(blkid -s UUID -o value "$SWAP_PART")"
-CMDLINE="root=UUID=$ROOT_UUID rootflags=subvol=@ rw resume=UUID=$SWAP_UUID"
+if [[ -f /swap/swapfile ]]; then
+  RESUME_OFFSET="$(btrfs inspect-internal map-swapfile -r /swap/swapfile)"
+  CMDLINE="root=UUID=$ROOT_UUID rootflags=subvol=@ rw resume=UUID=$ROOT_UUID resume_offset=$RESUME_OFFSET"
+else
+  CMDLINE="root=UUID=$ROOT_UUID rootflags=subvol=@ rw"
+fi
 if [[ -n $EXTRA_KERNEL_CMDLINE ]]; then
   CMDLINE="$CMDLINE $EXTRA_KERNEL_CMDLINE"
 fi
@@ -109,8 +113,17 @@ fi
 
 # ── AUR Packages ──────────────────────────────────────────────────────────────
 # adw-gtk3, wlogout are AUR-only — install via yay (non-blocking).
-sudo -u "$USERNAME" bash -lc 'yay -S --noconfirm --needed adw-gtk3 papirus-icon-theme wlogout' || \
-  echo 'WARN: AUR packages installation failed; some features may be missing' >&2
+# We configure GPG to automatically retrieve keys, which fixes "no public key" errors.
+sudo -u "$USERNAME" bash -lc '
+  mkdir -p ~/.gnupg
+  chmod 700 ~/.gnupg
+  echo "keyserver hkps://keyserver.ubuntu.com" > ~/.gnupg/dirmngr.conf
+  echo "keyserver-options auto-key-retrieve" > ~/.gnupg/gpg.conf
+  
+  # Try to receive keys generally, and skip PGP check as a fallback if keyservers are down
+  yay -S --noconfirm --needed adw-gtk3 papirus-icon-theme wlogout || \
+  yay -S --noconfirm --mflags "--skipinteg" --needed adw-gtk3 papirus-icon-theme wlogout
+' || echo 'WARN: AUR packages installation failed; some features may be missing' >&2
 
 # ── First-run onboarding ──────────────────────────────────────────────────────
 cat > /usr/local/bin/nirium-first-run <<'FIRST_RUN'

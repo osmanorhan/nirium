@@ -66,7 +66,7 @@ The installer will prompt you for:
 
 ```bash
 # Only run the base partitioning and pacstrap stage:
-sudo bash install.sh packaging --disk /dev/sda --swap-size 16
+sudo bash install.sh packaging --disk /dev/sda --swap-gib 16
 
 # Only run system configuration (chroot stage 1):
 sudo bash install.sh config --hostname snow --user osman
@@ -135,15 +135,29 @@ Volume and brightness keys are handled natively via `wpctl` and `brightnessctl`.
 
 ## ⚙️ Configuration & Customization
 
-The installer places configs in your home directory without overwriting existing files:
+Nirium uses a declarative, Nix-like architecture for Wayland applications. Rather than copying configurations into your home directory, Nirium installs system-wide immutable defaults to `/etc/xdg/` managed by `/etc/nirium/configuration.toml`.
 
-| App | Config path |
-| :--- | :--- |
-| Niri | `~/.config/niri/config.kdl` |
-| Waybar | `~/.config/waybar/config.jsonc` + `style.css` |
-| SwayNC | `~/.config/swaync/config.json` + `style.css` |
-| Kitty | `~/.config/kitty/kitty.conf` |
-| Zsh | `~/.zshrc` |
+**Your `~/.config` is strictly yours.** Nirium seeds missing component paths in `~/.config` as defaults (symlinks or writable copies when needed). If you create a real customized configuration in `~/.config`, it immediately and completely overrides the Nirium default, granting you full control.
+
+### The `nirium` CLI
+
+Nirium features a rolling updater that preserves existing `~/.config` overrides and only creates missing default symlinks.
+
+- **Update Defaults**: `sudo nirium update`
+  Fetches the latest `configuration.toml` components from upstream, synchronizes required system packages via `pacman`, updates the `nirium` tool itself, generates an immutable profile in `/opt/nirium/generations/latest/`, safely repoints `/etc/xdg/` symlinks, and seeds missing user defaults in `~/.config/`.
+
+- **Rollback Updates**: `sudo nirium rollback`
+  If an update breaks a component, this instantly swaps `/etc/xdg/` back to the `previous` generation.
+
+- **Detach and Customize**: `sudo nirium detach <component>`
+  *(Example: `nirium detach waybar`)*
+  Copies the current Nirium default configuration directly into your `~/.config/waybar/` directory. Since user configs override system defaults, you are now completely detached from the rolling updates for this specific component and can edit it freely knowing it is safe.
+
+- **List Generations**: `nirium list`
+  Shows current and previous system generations.
+
+- **Verify and Repair**: `sudo nirium doctor`
+  Verifies the system state against your configuration and automatically repairs any broken symlinks in `/etc/xdg/` or missing initial component files in `~/.config/`. Useful if data goes missing after a fresh install.
 
 ### Theming
 Nirium ships a **Monokai** palette applied across Waybar and SwayNC. On first boot, a complementary Monokai palette is generated from the wallpaper via `matugen`. To regenerate colors from a different wallpaper manually:
