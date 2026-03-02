@@ -191,10 +191,7 @@ cmd_update() {
     # Clone the latest main
     git clone --depth 1 "$UPSTREAM_URL" "$TMP_CLONE_DIR" >/dev/null 2>&1 || die "Failed to clone $UPSTREAM_URL"
     
-    local v2_dir="$TMP_CLONE_DIR/v2"
-    if [[ ! -d "$v2_dir" ]]; then
-        die "Repository structure is invalid. Missing v2/ directory."
-    fi
+    local repo_dir="$TMP_CLONE_DIR"
 
     if [[ -d "${GENERATIONS_DIR}/latest" ]]; then
         info "Rotating current 'latest' to 'previous'..."
@@ -229,7 +226,7 @@ cmd_update() {
 
         if [[ $is_enabled -eq 1 ]]; then
             info "  - Including component: $comp"
-            local tmpl_dir="${v2_dir}/templates/${comp}"
+            local tmpl_dir="${repo_dir}/templates/${comp}"
             
             if [[ -d "$tmpl_dir" ]]; then
                 # Copy into the immutable generation folder
@@ -249,7 +246,7 @@ cmd_update() {
     fi
 
     # Sync system dependencies (e.g. pacman packages defined by Nirium)
-    local pkg_file="${v2_dir}/packages/desktop.pacman"
+    local pkg_file="${repo_dir}/packages/desktop.pacman"
     if [[ -f "$pkg_file" ]]; then
         info "Synchronizing required system packages..."
         local PKG_LIST=()
@@ -296,7 +293,7 @@ cmd_update() {
     ensure_home_component_links "${linked_components[@]}"
     
     # Self-update the nirium CLI tool if it changed upstream
-    local upstream_script="${v2_dir}/nirium.sh"
+    local upstream_script="${repo_dir}/nirium.sh"
     if [[ -f "$upstream_script" ]]; then
         info "Checking for nirium CLI updates..."
         # If running as /usr/bin/nirium or similar, we update ourselves
@@ -383,7 +380,7 @@ cmd_bootstrap() {
     
     local local_dir="${1:-}"
     if [[ -z "$local_dir" || ! -d "$local_dir" ]]; then
-        die "Usage: nirium bootstrap <path_to_v2_dir>"
+        die "Usage: nirium bootstrap <path_to_repository>"
     fi
 
     if [[ ! -f "$CONFIG_FILE" ]]; then
@@ -632,7 +629,7 @@ Usage:
   nirium rollback  Revert /etc/xdg symlinks to the previous generation
   nirium detach    Copy a component's defaults to ~/.config to override them (e.g., nirium detach niri)
   nirium list      View all installed generations
-  nirium bootstrap <dir>  Bootstrap initial generation from a local v2 directory
+  nirium bootstrap <dir>  Bootstrap initial generation from a local directory
   nirium doctor    Verify and repair system state according to configuration
 
 Options:
