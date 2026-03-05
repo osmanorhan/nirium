@@ -5,6 +5,7 @@ spawn-at-startup "waybar"
 spawn-at-startup "swaync"
 spawn-at-startup "bash" "-lc" "swaybg -i \"$HOME/.config/theme/bg/current\" -m fill"
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
+spawn-at-startup "udiskie" "-t"
 spawn-at-startup "bash" "-c" "/etc/niri/first-boot.sh"
 
 // ── Idle / Lock Policy ────────────────────────────────────────────────────────

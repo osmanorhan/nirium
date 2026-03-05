@@ -25,6 +25,7 @@ While doing this; I cropped some parts that I dont like with Omarchy. The goal i
 | **Wallpaper** | swaybg |
 | **Terminal & Shell** | `kitty` + `zsh` (Starship, autosuggestions, syntax highlighting) |
 | **File Manager** | `yazi` (terminal) |
+| **Removable Drives** | `udisks2` + `udiskie` (auto-mount) |
 | **Networking** | NetworkManager + `impala` (TUI) |
 | **Bluetooth** | `bluetui` (terminal UI) |
 | **Audio** | pipewire + wireplumber + `pamixer` |
@@ -170,6 +171,10 @@ matugen image ~/path/to/wallpaper.png --mode dark
 - **Waybar** shows your Wi-Fi SSID and Bluetooth status.
 - Click the network icon on Waybar to open **impala** for Wi-Fi management.
 - Click the Bluetooth icon on Waybar to open **bluetui** for Bluetooth pairing.
+
+### External Drives
+- USB/external drives are auto-mounted via `udisks2` + `udiskie`.
+- Mounts appear under `/run/media/$USER` and are reachable from `~/Volumes` in `yazi`.
 
 ### Removing Autologin
 1. Open `/etc/sddm.conf.d/10-nirium.conf`

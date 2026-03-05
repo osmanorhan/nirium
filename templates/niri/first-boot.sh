@@ -29,4 +29,10 @@ if command -v notify-send > /dev/null 2>&1; then
     --icon=system-help
 fi
 
+# ── Removable drives shortcut (macOS-like) ───────────────────────────────────
+# udiskie mounts removable drives at /run/media/$USER; expose a stable shortcut.
+if [[ ! -e "$HOME/Volumes" ]]; then
+  ln -s "/run/media/$USER" "$HOME/Volumes" || true
+fi
+
 touch "$FLAG_FILE"

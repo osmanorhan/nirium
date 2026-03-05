@@ -42,6 +42,11 @@ kitty
 grim
 slurp
 wl-clipboard
+udisks2
+gvfs
+gvfs-mtp
+ntfs-3g
+exfatprogs
 pipewire
 wireplumber
 sddm
