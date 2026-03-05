@@ -28,7 +28,7 @@ While doing this; I cropped some parts that I dont like with Omarchy. The goal i
 | **Removable Drives** | `udisks2` + `udiskie` (auto-mount) |
 | **Networking** | NetworkManager + `impala` (TUI) |
 | **Bluetooth** | `bluetui` (terminal UI) |
-| **Audio** | pipewire + wireplumber + `pamixer` |
+| **Audio** | pipewire + wireplumber + `pulsemixer` |
 | **Image Viewer** | `imv` |
 | **Clipboard** | `cliphist` + `wl-clipboard` |
 | **Auto-theming** | `matugen` (generates palette from wallpaper on first boot) |

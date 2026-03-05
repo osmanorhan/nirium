@@ -79,8 +79,9 @@
                 "󰕾"
             ]
         },
-        "on-click": "kitty --class pamixer sh -c \"pamixer; echo \\\"\\\"; echo \\\"Press Enter to exit.\\\"; read\"",
+        "on-click": "bash -lc \"~/.config/waybar/audio-menu.sh\"",
         "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "on-click-middle": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
         "scroll-step": 5
     },
     "network": {
