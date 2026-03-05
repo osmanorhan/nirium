@@ -27,7 +27,7 @@
     "custom/power": {
         "format": "⏻",
         "tooltip": false,
-        "on-click": "wlogout -b 2 -c 0 -r 0 -m 0 --protocol layer-shell"
+        "on-click": "bash -lc \"~/.config/waybar/power-menu.sh\""
     },
     "niri/workspaces": {
         "format": "{index}",
@@ -63,7 +63,7 @@
     "cpu": {
         "format": "  {usage}%",
         "tooltip": false,
-        "on-click": "bash -c 'if pgrep -f \"kitty.*--class btop\" >/dev/null; then niri msg action focus-window --match app-id=btop; else kitty --class btop -e btop; fi'"
+        "on-click": "kitty --class btop -e btop"
     },
     "memory": {
         "format": "  {}%",
@@ -79,7 +79,7 @@
                 "󰕾"
             ]
         },
-        "on-click": "bash -c 'if pgrep -f \"kitty.*--class pamixer\" >/dev/null; then niri msg action focus-window --match app-id=pamixer; else kitty --class pamixer sh -c \"pamixer; echo \\\"\\\"; echo \\\"Press Enter to exit.\\\"; read\"; fi'",
+        "on-click": "kitty --class pamixer sh -c \"pamixer; echo \\\"\\\"; echo \\\"Press Enter to exit.\\\"; read\"",
         "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
         "scroll-step": 5
     },
@@ -88,13 +88,13 @@
         "format-ethernet": "󰈀  {ifname}",
         "format-disconnected": "󰤭  offline",
         "tooltip-format": "{ifname} via {gwaddr}",
-        "on-click": "bash -c 'if pgrep -f \"kitty.*--class impala\" >/dev/null; then niri msg action focus-window --match app-id=impala; else kitty --class impala -e impala; fi'"
+        "on-click": "kitty --class impala -e impala"
     },
     "bluetooth": {
         "format": "󰂯",
         "format-connected": "󰂱  {device_alias}",
         "format-off": "󰂲",
-        "on-click": "bash -c 'if pgrep -f \"kitty.*--class bluetui\" >/dev/null; then niri msg action focus-window --match app-id=bluetui; else kitty --class bluetui -e bluetui; fi'",
+        "on-click": "kitty --class bluetui -e bluetui",
         "tooltip-format": "{controller_alias}\n{num_connections} connected"
     },
     "battery": {

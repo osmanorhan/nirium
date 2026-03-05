@@ -95,7 +95,6 @@ main() {
   user_gid="$(arch-chroot /mnt id -g "$username")"
 
   log "Applying user configs for $username"
-  install -d "/mnt${user_home}/.config/niri"
   install -d "/mnt${user_home}/Pictures/Screenshots"
   install -d /mnt/usr/share/backgrounds
 
@@ -132,9 +131,6 @@ EOF
   rm -rf /mnt/root/nirium-bootstrap
 
   # Install non-declarative home user files
-  if [[ ! -f "/mnt${user_home}/.config/niri/first-boot.sh" ]]; then
-    install -m 755 "$SCRIPT_DIR/../templates/niri/first-boot.sh" "/mnt${user_home}/.config/niri/first-boot.sh"
-  fi
   if [[ ! -f "/mnt${user_home}/.zshrc" ]]; then
     cp "$SCRIPT_DIR/../templates/zsh/.zshrc" "/mnt${user_home}/.zshrc"
   fi

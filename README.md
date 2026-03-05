@@ -106,7 +106,7 @@ The `Mod` key is your **Super/Windows** key.
 | `Mod + Alt + P` | Poweroff |
 | `Mod + Alt + R` | Reboot |
 | `Mod + Alt + S` | Suspend |
-| `Mod + Shift + E` | Quit Niri |
+| `Mod + Shift + E` | Power menu |
 
 ### Windows & Layout
 | Key | Action |

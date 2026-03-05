@@ -18,7 +18,7 @@ binds {
 
     // ── Session ───────────────────────────────────────────────────────────────
     Super+Alt+L  hotkey-overlay-title="Lock screen"           { spawn "hyprlock"; }
-    Mod+Shift+E  hotkey-overlay-title="Power menu (wlogout)"  { spawn "wlogout"; }
+    Mod+Shift+E  hotkey-overlay-title="Power menu"            { spawn "bash" "-lc" "~/.config/waybar/power-menu.sh"; }
     Mod+Alt+P    hotkey-overlay-title="Poweroff"              { spawn "systemctl" "poweroff"; }
     Mod+Alt+R    hotkey-overlay-title="Reboot"                { spawn "systemctl" "reboot"; }
     Mod+Alt+S    hotkey-overlay-title="Suspend"               { spawn "systemctl" "suspend"; }

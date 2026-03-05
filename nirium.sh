@@ -166,10 +166,25 @@ ensure_home_component_links() {
                 continue
             fi
 
+            if [[ "$comp" == "niri" && -d "$destination" && ! -L "$destination" && ! -e "$destination/config.kdl" ]]; then
+                # Migrate legacy first-boot-only dirs created by older installers.
+                local has_extra_entries=""
+                has_extra_entries="$(find "$destination" -mindepth 1 ! -name "first-boot.sh" -print -quit 2>/dev/null || true)"
+                if [[ -z "$has_extra_entries" ]]; then
+                    rm -rf "$destination"
+                    ln -s "$system_source" "$destination"
+                    chown -h "$username:$username" "$destination" 2>/dev/null || true
+                    info "  - Migrated legacy $destination to managed symlink"
+                    continue
+                fi
+            fi
+
             if [[ ! -e "$destination" && ! -L "$destination" ]]; then
                 ln -s "$system_source" "$destination"
                 chown -h "$username:$username" "$destination" 2>/dev/null || true
                 info "  - Linked $destination -> $system_source"
+            elif [[ ! -L "$destination" ]]; then
+                info "  - Keeping existing user override at $destination"
             fi
         done
     done < <(list_managed_users)
@@ -187,10 +202,10 @@ cmd_update() {
     
     # Clean up old temp dirs
     rm -rf "$TMP_CLONE_DIR" "$STAGING_DIR"
-    
+
     # Clone the latest main
     git clone --depth 1 "$UPSTREAM_URL" "$TMP_CLONE_DIR" >/dev/null 2>&1 || die "Failed to clone $UPSTREAM_URL"
-    
+
     local repo_dir="$TMP_CLONE_DIR"
 
     if [[ -d "${GENERATIONS_DIR}/latest" ]]; then

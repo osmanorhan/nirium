@@ -112,7 +112,7 @@ fi
 # They are started directly from ~/.config/niri/config.kdl via spawn-at-startup.
 
 # ── AUR Packages ──────────────────────────────────────────────────────────────
-# adw-gtk3, wlogout are AUR-only — install via yay (non-blocking).
+# adw-gtk3 is AUR-only — install via yay (non-blocking).
 # We configure GPG to automatically retrieve keys, which fixes "no public key" errors.
 sudo -u "$USERNAME" bash -lc '
   mkdir -p ~/.gnupg
@@ -121,8 +121,8 @@ sudo -u "$USERNAME" bash -lc '
   echo "keyserver-options auto-key-retrieve" > ~/.gnupg/gpg.conf
   
   # Try to receive keys generally, and skip PGP check as a fallback if keyservers are down
-  yay -S --noconfirm --needed adw-gtk3 papirus-icon-theme wlogout || \
-  yay -S --noconfirm --mflags "--skipinteg" --needed adw-gtk3 papirus-icon-theme wlogout
+  yay -S --noconfirm --needed adw-gtk3 papirus-icon-theme || \
+  yay -S --noconfirm --mflags "--skipinteg" --needed adw-gtk3 papirus-icon-theme
 ' || echo 'WARN: AUR packages installation failed; some features may be missing' >&2
 
 # ── First-run onboarding ──────────────────────────────────────────────────────
