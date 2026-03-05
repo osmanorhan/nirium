@@ -36,6 +36,7 @@ usbutils
 niri
 xwayland-satellite
 xdg-desktop-portal-gtk
+keyd
 
 # Desktop essentials
 kitty

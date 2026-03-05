@@ -32,6 +32,33 @@ require_root() {
     fi
 }
 
+apply_keyd_copy_paste_remap() {
+    if ! command -v keyd >/dev/null 2>&1; then
+        info "keyd not installed; skipping Mod+C/Mod+V remap"
+        return 0
+    fi
+
+    install -d /etc/keyd
+    cat > /etc/keyd/default.conf <<'KEYDCONF'
+[ids]
+*
+
+[main]
+leftmeta+c = C-c
+leftmeta+v = C-v
+leftmeta+x = C-x
+leftmeta+a = C-a
+rightmeta+c = C-c
+rightmeta+v = C-v
+rightmeta+x = C-x
+rightmeta+a = C-a
+KEYDCONF
+
+    systemctl enable keyd.service >/dev/null 2>&1 || true
+    systemctl restart keyd.service >/dev/null 2>&1 || true
+    info "Applied keyd Mod+C/Mod+V remap"
+}
+
 # Very basic bash-native TOML parser for our strict format
 parse_config_is_enabled() {
     local component="$1"
@@ -306,6 +333,7 @@ cmd_update() {
 
     info "Linking enabled components into user ~/.config directories..."
     ensure_home_component_links "${linked_components[@]}"
+    apply_keyd_copy_paste_remap
     
     # Self-update the nirium CLI tool if it changed upstream
     local upstream_script="${repo_dir}/nirium.sh"
@@ -467,6 +495,7 @@ cmd_bootstrap() {
 
     info "Linking enabled components into user ~/.config directories..."
     ensure_home_component_links "${linked_components[@]}"
+    apply_keyd_copy_paste_remap
 
     success "Bootstrap complete! You are now on $gen_name."
 }
