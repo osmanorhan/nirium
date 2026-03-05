@@ -9,7 +9,16 @@ set -Eeuo pipefail
 trap 'echo "ERROR: chroot stage 1 failed at line $LINENO: $BASH_COMMAND" >&2' ERR
 
 # ── Timezone / clock ──────────────────────────────────────────────────────────
+if [[ -z ${TIMEZONE:-} ]]; then
+  echo "ERROR: TIMEZONE is not set" >&2
+  exit 1
+fi
+if [[ ! -e /usr/share/zoneinfo/"$TIMEZONE" ]]; then
+  echo "ERROR: Invalid timezone: $TIMEZONE" >&2
+  exit 1
+fi
 ln -sf "/usr/share/zoneinfo/$TIMEZONE" /etc/localtime
+echo "$TIMEZONE" > /etc/timezone
 hwclock --systohc
 
 # ── Locale ────────────────────────────────────────────────────────────────────

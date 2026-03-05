@@ -94,7 +94,7 @@ main() {
   extra_kernel_cmdline="${extra_kernel_cmdline:-$(read_state_value EXTRA_KERNEL_CMDLINE)}"
 
   keymap="${keymap:-us}"
-  timezone="${timezone:-UTC}"
+  timezone="${timezone:-Europe/Istanbul}"
   locale="${locale:-en_US.UTF-8}"
   hostname="${hostname:-archniri}"
   username="${username:-archuser}"
@@ -106,6 +106,8 @@ main() {
   username="$(prompt_default "Main username" "$username")"
   extra_kernel_cmdline="$(prompt_default "Extra kernel cmdline (empty for none)" "$extra_kernel_cmdline")"
   username_shell="$(prompt_default "User shell (e.g. /bin/zsh, /bin/bash, /bin/fish)" "/bin/zsh")"
+
+  [[ -e "/usr/share/zoneinfo/$timezone" ]] || die "Invalid timezone: $timezone (not found in /usr/share/zoneinfo)"
 
   local user_password=""
   local root_password=""
