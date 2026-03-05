@@ -1,12 +1,12 @@
 {
     "layer": "top",
     "position": "top",
-    "height": 34,
-    "margin-top": 6,
-    "margin-left": 10,
-    "margin-right": 10,
+    "height": 30,
+    "margin-top": 4,
+    "margin-left": 8,
+    "margin-right": 8,
     "margin-bottom": 0,
-    "spacing": 4,
+    "spacing": 2,
     "modules-left": [
         "niri/workspaces",
         "niri/window"
@@ -34,7 +34,7 @@
         "on-click": "activate"
     },
     "niri/window": {
-        "max-length": 40,
+        "max-length": 28,
         "format": "{title}",
         "separate-outputs": true,
         "rewrite": {
@@ -42,7 +42,7 @@
         }
     },
     "clock": {
-        "format": "  {:%H:%M}",
+        "format": "{:%H:%M}",
         "format-alt": "  {:%A, %B %d, %Y}",
         "tooltip-format": "<tt><small>{calendar}</small></tt>",
         "calendar": {
@@ -84,15 +84,15 @@
         "scroll-step": 5
     },
     "network": {
-        "format-wifi": "󰤨  {essid}",
-        "format-ethernet": "󰈀  {ifname}",
-        "format-disconnected": "󰤭  offline",
-        "tooltip-format": "{ifname} via {gwaddr}",
+        "format-wifi": "󰤨",
+        "format-ethernet": "󰈀",
+        "format-disconnected": "󰤭",
+        "tooltip-format": "{ifname}",
         "on-click": "kitty --class impala -e impala"
     },
     "bluetooth": {
         "format": "󰂯",
-        "format-connected": "󰂱  {device_alias}",
+        "format-connected": "󰂱",
         "format-off": "󰂲",
         "on-click": "kitty --class bluetui -e bluetui",
         "tooltip-format": "{controller_alias}\n{num_connections} connected"
@@ -121,8 +121,8 @@
         ]
     },
     "tray": {
-        "icon-size": 18,
-        "spacing": 8
+        "icon-size": 14,
+        "spacing": 6
     },
     "custom/swaync": {
         "tooltip": false,

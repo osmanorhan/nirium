@@ -1,24 +1,17 @@
-/* ── Nirium Waybar Style — Floating Pill Monokai Aesthetics ───────────────── */
-
-@define-color base rgba(39, 40, 34, 0.85);
-/* Transparent Monokai Base */
-@define-color mantle #1e1e1e;
-@define-color surface0 rgba(62, 61, 50, 0.9);
-@define-color surface1 #49483e;
-@define-color overlay #75715e;
-@define-color text #f8f8f2;
-@define-color subtext #cfcfc2;
-@define-color yellow #e6db74;
-@define-color orange #fd971f;
-@define-color red #f92672;
-@define-color purple #ae81ff;
-@define-color cyan #66d9ef;
-@define-color green #a6e22e;
-@define-color blue #66d9ef;
+/* Clean compact theme with subtle contrast and minimal accent use */
+@define-color bar_bg rgba(20, 20, 22, 0.70);
+@define-color module_bg rgba(30, 30, 33, 0.78);
+@define-color module_bg_hover rgba(42, 42, 46, 0.88);
+@define-color border rgba(255, 255, 255, 0.10);
+@define-color text #e8e8ea;
+@define-color subtext #b9bbc1;
+@define-color accent #9ec3ff;
+@define-color warning #ffb86b;
+@define-color critical #ff7b7b;
 
 * {
-  font-family: "JetBrainsMono Nerd Font", "Noto Sans", sans-serif;
-  font-size: 13px;
+  font-family: "Noto Sans", "Noto Sans Symbols2", sans-serif;
+  font-size: 12px;
   font-weight: 500;
   border: none;
   border-radius: 0;
@@ -28,12 +21,10 @@
 }
 
 window#waybar {
-  background-color: transparent;
-  /* Makes the main bar completely see-through */
+  background-color: @bar_bg;
   color: @text;
 }
 
-/* Base pill shape for all modules */
 #custom-power,
 #workspaces,
 #window,
@@ -45,145 +36,151 @@ window#waybar {
 #bluetooth,
 #battery,
 #tray {
-  background-color: @base;
+  background-color: @module_bg;
   color: @text;
-  border-radius: 12px;
-  margin: 0px 2px;
-  padding: 0px 10px;
-  border: 1px solid @surface1;
-  transition: all 0.2s ease-in-out;
+  border-radius: 9px;
+  margin: 2px 1px;
+  padding: 0 8px;
+  border: 1px solid @border;
+  transition: background-color 0.15s ease;
 }
 
-/* ── Left Modules ────────────────────────────────────────── */
+#custom-power:hover,
+#workspaces:hover,
+#window:hover,
+#clock:hover,
+#cpu:hover,
+#memory:hover,
+#pulseaudio:hover,
+#network:hover,
+#bluetooth:hover,
+#battery:hover,
+#tray:hover {
+  background-color: @module_bg_hover;
+}
 
 #custom-power {
-  color: @red;
-  font-size: 16px;
-  margin-left: 0px;
-  padding-right: 16px;
-  padding-left: 16px;
+  color: @subtext;
+  font-size: 13px;
+  padding: 0 10px;
 }
 
 #custom-power:hover {
-  background-color: @red;
-  color: @base;
+  color: @critical;
 }
 
 #workspaces {
-  padding: 0px 4px;
+  padding: 0 4px;
 }
 
 #workspaces button {
-  padding: 2px 8px;
-  margin: 4px;
+  padding: 1px 7px;
+  margin: 3px 2px;
   color: @subtext;
-  border-radius: 8px;
-  transition: all 0.2s ease;
+  border-radius: 7px;
+  background: transparent;
+  background-image: none;
+  border: 1px solid transparent;
+  box-shadow: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 #workspaces button.active {
-  background-color: @cyan;
-  color: @mantle;
-  font-weight: bold;
+  background: rgba(255, 255, 255, 0.10);
+  background-image: none;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  color: #f3f4f6;
+  font-weight: 600;
 }
 
 #workspaces button:hover {
-  background-color: @surface1;
-  color: @text;
-  text-shadow: 0 0 2px rgba(39, 40, 34, 0.85);
+  background: rgba(82, 84, 92, 0.55);
+  background-image: none;
+  border: 1px solid rgba(186, 190, 200, 0.35);
+  color: #ffffff;
+}
+
+#workspaces button.active:hover {
+  background: rgba(98, 102, 112, 0.62);
+  background-image: none;
+  border: 1px solid rgba(198, 202, 212, 0.4);
+  color: #ffffff;
 }
 
 #window {
-  color: @purple;
-  /* Optional: hide window title background if you want it minimalist
-    background-color: transparent;
-    border: none;
-    */
+  color: @subtext;
 }
 
 #window.empty {
   background-color: transparent;
   border: none;
+  padding: 0;
 }
-
-/* ── Center Module ───────────────────────────────────────── */
 
 #clock {
-  color: @yellow;
-  font-size: 14px;
-  font-weight: bold;
-  padding: 0px 14px;
+  font-weight: 600;
+  letter-spacing: 0.15px;
+  padding: 0 9px;
 }
 
-/* ── Right Modules ───────────────────────────────────────── */
-
-#cpu {
-  color: @orange;
-}
-
-#memory {
-  color: @green;
-}
-
+#workspaces button,
+#custom-power,
+#network,
+#bluetooth,
+#battery,
 #pulseaudio {
-  color: @cyan;
+  font-family: "Noto Sans Symbols2", "Noto Sans", sans-serif;
 }
 
-#pulseaudio.muted {
-  color: @overlay;
+#cpu,
+#memory,
+#pulseaudio,
+#network,
+#bluetooth,
+#battery {
+  color: @subtext;
 }
 
-#network {
-  color: @purple;
-}
-
+#pulseaudio.muted,
 #network.disconnected {
-  color: @red;
-}
-
-#bluetooth {
-  color: @blue;
+  color: @warning;
 }
 
 #battery.charging {
-  color: @green;
+  color: @accent;
 }
 
 #battery.warning {
-  color: @orange;
+  color: @warning;
 }
 
 #battery.critical {
-  color: @red;
+  color: @critical;
   animation: blink 2s linear infinite;
 }
 
 #tray {
-  padding: 0px 10px;
+  padding: 0 7px;
 }
 
-/* Tooltips */
 tooltip {
-  background: @surface0;
+  background: rgba(28, 28, 30, 0.95);
   color: @text;
-  border: 1px solid @cyan;
-  border-radius: 10px;
-  padding: 10px;
+  border: 1px solid @border;
+  border-radius: 9px;
+  padding: 8px;
 }
 
 @keyframes blink {
   0% {
-    background-color: @base;
-    color: @red;
+    color: @critical;
   }
 
   50% {
-    background-color: @red;
     color: @text;
   }
 
   100% {
-    background-color: @base;
-    color: @red;
+    color: @critical;
   }
 }
