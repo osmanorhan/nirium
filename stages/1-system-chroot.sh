@@ -95,6 +95,7 @@ FIND_BOOTLOADERS=yes
 BOOT_ORDER="*, *fallback, Snapshots"
 MAX_SNAPSHOT_ENTRIES=5
 SNAPSHOT_FORMAT_CHOICE=5
+ROOT_SNAPSHOTS_PATH="/@snapshots"
 LIMINE_DEFAULT
 
 install -d /boot/EFI/arch-limine /boot/EFI/BOOT
@@ -144,33 +145,44 @@ if command -v efibootmgr > /dev/null 2>&1; then
 fi
 
 if pacman -Si limine-snapper-sync > /dev/null 2>&1 && pacman -Si limine-mkinitcpio-hook > /dev/null 2>&1; then
-  pacman -S --noconfirm --needed limine-snapper-sync limine-mkinitcpio-hook || true
+  pacman -S --noconfirm --needed limine-snapper-sync limine-mkinitcpio-hook
+else
+  echo "ERROR: limine-snapper-sync and limine-mkinitcpio-hook are required for snapshot boot entries" >&2
+  exit 1
 fi
 
 # ── Snapper (Btrfs snapshots) ─────────────────────────────────────────────────
 if command -v snapper > /dev/null 2>&1; then
   if ! snapper list-configs 2>/dev/null | grep -Eq '(^|[[:space:]])root([[:space:]]|$)'; then
     umount /.snapshots 2>/dev/null || true
-    rm -rf /.snapshots || true
-    snapper -c root create-config / || true
+    rm -rf /.snapshots
+    snapper -c root create-config /
     mkdir -p /.snapshots
-    mount -a || true
+    mount -a
   fi
 
   if [[ -d /home ]] && ! snapper list-configs 2>/dev/null | grep -Eq '(^|[[:space:]])home([[:space:]]|$)'; then
-    snapper -c home create-config /home || true
+    snapper -c home create-config /home
+  fi
+
+  if ! snapper list-configs 2>/dev/null | grep -Eq '(^|[[:space:]])root([[:space:]]|$)'; then
+    echo "ERROR: snapper root config was not created successfully" >&2
+    exit 1
   fi
 
   btrfs quota enable / > /dev/null 2>&1 || true
   for cfg in /etc/snapper/configs/root /etc/snapper/configs/home; do
     [[ -f $cfg ]] || continue
-    sed -i 's/^TIMELINE_CREATE="yes"/TIMELINE_CREATE="no"/' "$cfg"
+    sed -i 's/^TIMELINE_CREATE=".*"/TIMELINE_CREATE="yes"/' "$cfg"
     sed -i 's/^NUMBER_LIMIT="50"/NUMBER_LIMIT="5"/' "$cfg"
     sed -i 's/^NUMBER_LIMIT_IMPORTANT="10"/NUMBER_LIMIT_IMPORTANT="5"/' "$cfg"
     sed -i 's/^SPACE_LIMIT="0.5"/SPACE_LIMIT="0.3"/' "$cfg"
     sed -i 's/^FREE_LIMIT="0.2"/FREE_LIMIT="0.3"/' "$cfg"
   done
   systemctl enable snapper-timeline.timer snapper-cleanup.timer || true
+else
+  echo "ERROR: snapper is not installed; snapshot support is required" >&2
+  exit 1
 fi
 
 # ── Limine refresh helper ─────────────────────────────────────────────────────

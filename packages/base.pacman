@@ -4,6 +4,7 @@ linux
 linux-firmware
 btrfs-progs
 snapper
+snap-pac
 
 # Bootloader
 limine
