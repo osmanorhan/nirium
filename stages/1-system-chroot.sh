@@ -104,12 +104,15 @@ cp -f /usr/share/limine/BOOTX64.EFI /boot/EFI/BOOT/BOOTX64.EFI
 
 cat > /boot/limine.conf <<LIMINE
 timeout: 5
+default_entry: 2
 
-/Arch Linux
-    protocol: linux
-    path: boot():/vmlinuz-linux
-    cmdline: $CMDLINE
-    module_path: boot():/initramfs-linux.img
+/+nirium
+    comment: machine-id=$(cat /etc/machine-id)
+    //linux
+        protocol: linux
+        path: boot():/vmlinuz-linux
+        cmdline: $CMDLINE
+        module_path: boot():/initramfs-linux.img
 LIMINE
 install -Dm644 /boot/limine.conf /boot/EFI/arch-limine/limine.conf
 install -Dm644 /boot/limine.conf /boot/EFI/BOOT/limine.conf
@@ -193,7 +196,28 @@ set -Eeuo pipefail
 
 [[ -f /boot/limine.conf ]] || exit 0
 
+ensure_default_entry() {
+  if grep -q '^default_entry:' /boot/limine.conf; then
+    sed -i 's/^default_entry:.*/default_entry: 2/' /boot/limine.conf
+  else
+    sed -i '1a default_entry: 2' /boot/limine.conf
+  fi
+}
+
+strip_legacy_arch_entry() {
+  grep -q '^/+nirium$' /boot/limine.conf || return 0
+  awk '
+    BEGIN { skip = 0 }
+    /^\/Arch Linux$/ { skip = 1; next }
+    skip && /^\/[^\/]/ { skip = 0 }
+    !skip { print }
+  ' /boot/limine.conf > /boot/limine.conf.tmp
+  mv /boot/limine.conf.tmp /boot/limine.conf
+}
+
 install -d /boot/EFI/arch-limine /boot/EFI/BOOT
+strip_legacy_arch_entry
+ensure_default_entry
 install -Dm644 /boot/limine.conf /boot/EFI/arch-limine/limine.conf
 install -Dm644 /boot/limine.conf /boot/EFI/BOOT/limine.conf
 
@@ -208,6 +232,13 @@ fi
 if command -v limine-snapper-sync > /dev/null 2>&1; then
   limine-snapper-sync || true
 fi
+
+# limine-update and limine-snapper-sync may modify /boot/limine.conf.
+# Sync the final file to both EFI config locations used by firmware entries.
+strip_legacy_arch_entry
+ensure_default_entry
+install -Dm644 /boot/limine.conf /boot/EFI/arch-limine/limine.conf
+install -Dm644 /boot/limine.conf /boot/EFI/BOOT/limine.conf
 LIMINE_REFRESH
 chmod +x /usr/local/bin/nirium-limine-refresh
 
@@ -531,6 +562,10 @@ rightmeta+c = C-c
 rightmeta+v = C-v
 rightmeta+x = C-x
 rightmeta+a = C-a
+meta+c = C-c
+meta+v = C-v
+meta+x = C-x
+meta+a = C-a
 KEYDCONF
 
 # ── Services ──────────────────────────────────────────────────────────────────

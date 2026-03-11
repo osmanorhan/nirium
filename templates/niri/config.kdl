@@ -11,6 +11,16 @@
 prefer-no-csd
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
+layout {
+    gaps 6
+
+    focus-ring {
+        width 2
+        active-color "#8f918b"
+        inactive-color "#4f514e"
+    }
+}
+
 include "startup.kdl"
 include "input.kdl"
 include "binds.kdl"

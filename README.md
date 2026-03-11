@@ -119,7 +119,10 @@ The `Mod` key is your **Super/Windows** key.
 | `Mod + H/J/K/L` | Move focus (vim-style) |
 | `Mod + Shift + H/J/K/L` | Move window |
 | `Mod + - / =` | Resize column |
-| `Mod + Shift + S / Print` | Screenshot |
+| `Mod + Shift + S` | Screenshot area (save + clipboard) |
+| `Mod + Shift + W` | Screenshot focused window |
+| `Mod + Shift + O` | Screenshot display/output |
+| `Mod + Ctrl + S` | Screenshot full screen |
 
 ### Workspaces
 | Key | Action |

@@ -66,12 +66,15 @@ fi
 # ── Limine update for GPU-adjusted cmdline ────────────────────────────────────
 cat > /boot/limine.conf <<LIMINE
 timeout: 5
+default_entry: 2
 
-/Arch Linux
-    protocol: linux
-    path: boot():/vmlinuz-linux
-    cmdline: $CMDLINE
-    module_path: boot():/initramfs-linux.img
+/+nirium
+    comment: machine-id=$(cat /etc/machine-id)
+    //linux
+        protocol: linux
+        path: boot():/vmlinuz-linux
+        cmdline: $CMDLINE
+        module_path: boot():/initramfs-linux.img
 LIMINE
 install -Dm644 /boot/limine.conf /boot/EFI/arch-limine/limine.conf
 install -Dm644 /boot/limine.conf /boot/EFI/BOOT/limine.conf

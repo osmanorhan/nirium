@@ -13,7 +13,7 @@ binds {
     Mod+N        hotkey-overlay-title="Notification center"   { spawn-sh "swaync-client -t -sw"; }
     Mod+Escape   hotkey-overlay-title="System monitor"        { spawn "kitty" "--" "btop"; }
 
-    Mod+T        hotkey-overlay-title="Theme Selector"        { spawn-sh "~/.config/theme/theme-selector.sh"; }
+    Mod+Shift+T  hotkey-overlay-title="Theme Selector"        { spawn-sh "~/.config/theme/theme-selector.sh"; }
 
     // ── Session ───────────────────────────────────────────────────────────────
     Super+Alt+L  hotkey-overlay-title="Lock screen"           { spawn "hyprlock"; }
@@ -80,11 +80,11 @@ binds {
     Mod+Shift+8 { move-column-to-workspace 8; }
     Mod+Shift+9 { move-column-to-workspace 9; }
 
-    // ── Screenshots ───────────────────────────────────────────────────────────
-    Print       { screenshot; }
-    Ctrl+Print  { screenshot-screen; }
-    Alt+Print   { screenshot-window; }
-    Mod+Shift+S { screenshot; }
+    // ── Screenshots (no Print key required) ──────────────────────────────────
+    Mod+Shift+S { spawn-sh "~/.config/niri/screenshot.sh area"; }
+    Mod+Shift+W { spawn-sh "~/.config/niri/screenshot.sh window"; }
+    Mod+Shift+O { spawn-sh "~/.config/niri/screenshot.sh output"; }
+    Mod+Ctrl+S  { spawn-sh "~/.config/niri/screenshot.sh screen"; }
 
     // ── Audio ─────────────────────────────────────────────────────────────────
     XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ -l 1.0"; }
