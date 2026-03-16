@@ -1,6 +1,7 @@
 # Small polish extras, still lightweight
 btop
 fastfetch
+ripgrep
 xdg-utils
 xdg-user-dirs
 libnotify

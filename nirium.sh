@@ -52,6 +52,10 @@ rightmeta+c = C-c
 rightmeta+v = C-v
 rightmeta+x = C-x
 rightmeta+a = C-a
+meta+c = C-c
+meta+v = C-v
+meta+x = C-x
+meta+a = C-a
 KEYDCONF
 
     systemctl enable keyd.service >/dev/null 2>&1 || true
@@ -342,9 +346,17 @@ cmd_update() {
         # If running as /usr/bin/nirium or similar, we update ourselves
         local current_bin="$(command -v nirium || echo "")"
         if [[ -n "$current_bin" ]]; then
-            cp "$upstream_script" "$current_bin"
-            chmod +x "$current_bin"
-            info "  - Successfully updated $current_bin"
+            local current_real=""
+            local upstream_real=""
+            current_real="$(readlink -f "$current_bin" 2>/dev/null || printf '%s\n' "$current_bin")"
+            upstream_real="$(readlink -f "$upstream_script" 2>/dev/null || printf '%s\n' "$upstream_script")"
+
+            if [[ "$current_real" != "$upstream_real" ]]; then
+                local tmp_bin="${current_bin}.tmp.$$"
+                install -m 755 "$upstream_script" "$tmp_bin"
+                mv -f "$tmp_bin" "$current_bin"
+                info "  - Successfully updated $current_bin"
+            fi
         fi
     fi
 
@@ -656,6 +668,8 @@ cmd_doctor() {
         # For now, we trust it to fix things silently, but we'll print its standard verbose output.
         ensure_home_component_links "${linked_components[@]}"
     fi
+
+    apply_keyd_copy_paste_remap
 
     if [[ $issues_found -eq 0 ]]; then
         success "System state aligns with configuration. No issues found."

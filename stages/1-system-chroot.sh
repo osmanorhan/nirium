@@ -98,9 +98,12 @@ SNAPSHOT_FORMAT_CHOICE=5
 ROOT_SNAPSHOTS_PATH="/@snapshots"
 LIMINE_DEFAULT
 
-install -d /boot/EFI/arch-limine /boot/EFI/BOOT
+install -d /boot/EFI/arch-limine /boot/EFI/BOOT /boot/EFI/limine
 cp -f /usr/share/limine/BOOTX64.EFI /boot/EFI/arch-limine/BOOTX64.EFI
 cp -f /usr/share/limine/BOOTX64.EFI /boot/EFI/BOOT/BOOTX64.EFI
+if [[ -f /usr/share/limine/limine_x64.efi ]]; then
+  cp -f /usr/share/limine/limine_x64.efi /boot/EFI/limine/limine_x64.efi
+fi
 
 cat > /boot/limine.conf <<LIMINE
 timeout: 5
@@ -116,6 +119,7 @@ default_entry: 2
 LIMINE
 install -Dm644 /boot/limine.conf /boot/EFI/arch-limine/limine.conf
 install -Dm644 /boot/limine.conf /boot/EFI/BOOT/limine.conf
+install -Dm644 /boot/limine.conf /boot/EFI/limine/limine.conf
 
 efibootmgr --create \
   --disk "$TARGET_DISK" \
@@ -215,11 +219,12 @@ strip_legacy_arch_entry() {
   mv /boot/limine.conf.tmp /boot/limine.conf
 }
 
-install -d /boot/EFI/arch-limine /boot/EFI/BOOT
+install -d /boot/EFI/arch-limine /boot/EFI/BOOT /boot/EFI/limine
 strip_legacy_arch_entry
 ensure_default_entry
 install -Dm644 /boot/limine.conf /boot/EFI/arch-limine/limine.conf
 install -Dm644 /boot/limine.conf /boot/EFI/BOOT/limine.conf
+install -Dm644 /boot/limine.conf /boot/EFI/limine/limine.conf
 
 if command -v limine-update > /dev/null 2>&1; then
   if ! limine-update; then
@@ -239,6 +244,7 @@ strip_legacy_arch_entry
 ensure_default_entry
 install -Dm644 /boot/limine.conf /boot/EFI/arch-limine/limine.conf
 install -Dm644 /boot/limine.conf /boot/EFI/BOOT/limine.conf
+install -Dm644 /boot/limine.conf /boot/EFI/limine/limine.conf
 LIMINE_REFRESH
 chmod +x /usr/local/bin/nirium-limine-refresh
 

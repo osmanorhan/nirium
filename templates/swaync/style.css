@@ -12,25 +12,75 @@
 @define-color purple #ae81ff;
 @define-color cyan #66d9ef;
 @define-color green #a6e22e;
+@define-color shadow rgba(0, 0, 0, 0.28);
+@define-color popup rgba(39, 40, 34, 0.94);
+@define-color popup-border rgba(117, 113, 94, 0.55);
 
 * {
     font-family: "JetBrainsMono Nerd Font", "Noto Sans", sans-serif;
 }
 
-.control-center {
-    background: @base;
-    border: 1px solid @surface1;
-    border-radius: 10px;
-    padding: 8px;
-    color: @text;
+notificationwindow,
+blankwindow,
+.floating-notifications,
+.floating-notifications.background,
+.control-center-list,
+.control-center-list-placeholder,
+.notification-group,
+.notification-group-list,
+.notification-group-close-all-button {
+    background: transparent;
 }
 
-.notification-row .notification {
-    background: @surface0;
-    border-radius: 8px;
-    padding: 12px;
-    margin: 4px 0;
-    border-left: 3px solid @cyan;
+.control-center {
+    background: rgba(39, 40, 34, 0.97);
+    border: 1px solid @surface1;
+    border-radius: 12px;
+    padding: 10px;
+    color: @text;
+    box-shadow: 0 18px 40px 0 @shadow;
+}
+
+.notification-row {
+    background: none;
+    margin: 0;
+    outline: none;
+    padding: 0;
+}
+
+.notification-row:focus,
+.notification-group:focus {
+    background: rgba(73, 72, 62, 0.3);
+}
+
+.notification-row .notification-background {
+    background: transparent;
+    padding: 6px 12px;
+}
+
+.notification-row .notification-background .notification {
+    background: @popup;
+    border-radius: 10px;
+    padding: 0;
+    margin: 0;
+    border: 1px solid @popup-border;
+    border-left: 2px solid @cyan;
+    box-shadow: 0 10px 26px 0 @shadow;
+}
+
+.notification-row .notification-background .notification .notification-default-action {
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+    box-shadow: none;
+    color: @text;
+    margin: 0;
+    padding: 10px 12px;
+}
+
+.notification-row .notification-background .notification .notification-default-action:hover,
+.notification-row .notification-background .notification .notification-default-action:focus {
+    background: rgba(62, 61, 50, 0.97);
 }
 
 .notification-row .critical .notification {

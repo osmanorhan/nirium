@@ -78,10 +78,16 @@ default_entry: 2
 LIMINE
 install -Dm644 /boot/limine.conf /boot/EFI/arch-limine/limine.conf
 install -Dm644 /boot/limine.conf /boot/EFI/BOOT/limine.conf
+install -Dm644 /boot/limine.conf /boot/EFI/limine/limine.conf
 
 if [[ -f /etc/default/limine ]]; then
   ESCAPED_CMDLINE="${CMDLINE//&/\\&}"
   sed -i "s|^KERNEL_CMDLINE\\[default\\]=.*|KERNEL_CMDLINE[default]=\"$ESCAPED_CMDLINE\"|" /etc/default/limine || true
+  if grep -q '^ROOT_SNAPSHOTS_PATH=' /etc/default/limine; then
+    sed -i 's|^ROOT_SNAPSHOTS_PATH=.*|ROOT_SNAPSHOTS_PATH="/@snapshots"|' /etc/default/limine || true
+  else
+    printf '%s\n' 'ROOT_SNAPSHOTS_PATH="/@snapshots"' >> /etc/default/limine
+  fi
 fi
 
 mkinitcpio -P
