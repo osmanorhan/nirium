@@ -553,27 +553,6 @@ else
   systemctl enable nirium-ufw-firstboot.service
 fi
 
-# ── Global key remap (Windows-like copy/paste) ───────────────────────────────
-install -d /etc/keyd
-cat > /etc/keyd/default.conf <<'KEYDCONF'
-[ids]
-*
-
-[main]
-leftmeta+c = C-c
-leftmeta+v = C-v
-leftmeta+x = C-x
-leftmeta+a = C-a
-rightmeta+c = C-c
-rightmeta+v = C-v
-rightmeta+x = C-x
-rightmeta+a = C-a
-meta+c = C-c
-meta+v = C-v
-meta+x = C-x
-meta+a = C-a
-KEYDCONF
-
 # ── Services ──────────────────────────────────────────────────────────────────
 systemctl enable NetworkManager.service
 systemctl enable systemd-resolved.service
@@ -582,7 +561,6 @@ systemctl disable greetd.service || true
 systemctl mask greetd.service || true
 systemctl enable sddm.service
 systemctl enable ufw.service
-systemctl enable keyd.service || true
 systemctl set-default graphical.target || true
 systemctl enable power-profiles-daemon.service || true
 
